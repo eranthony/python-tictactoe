@@ -1,4 +1,4 @@
-from src.game_board import GameBoard
+from game_board import GameBoard
 
 
 def next_player(cur_player, total_player):
