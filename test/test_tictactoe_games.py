@@ -1,5 +1,5 @@
 import pytest
-from src.tictactoe_rules import next_player, is_winning_move
+from src.tictactoe_game import next_player, is_winning_move
 from src.game_board import GameBoard
 
 
