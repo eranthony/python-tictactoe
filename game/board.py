@@ -1,7 +1,7 @@
+"""Module docstring"""
 
-class GameBoard(object):
-    """
-    Class used to represent a square game board with a value at each 
+class Board(object):
+    """Class used to represent a square game board with a value at each 
     location.
     
     The board is immutable and may contain heterogeneous values. Board
@@ -62,7 +62,7 @@ class GameBoard(object):
         return row*self._side + col
 
 
-    def side(self):
+    def side_len(self):
         """Returns length of board's side."""
         return self._side
 
@@ -133,10 +133,10 @@ class GameBoard(object):
             the given value. Returns an empty list of the value is not
             present in the board.
         """
-        return [(row,col) 
-            for row in range(self._side)
+        return [(row, col) 
+                for row in range(self._side)
                 for col in range(self._side) 
-                    if self.get(row, col) == val]
+                if self.get(row, col) == val]
 
 
     def set(self, row, col, val):
@@ -155,7 +155,7 @@ class GameBoard(object):
         self._validate_row(row)
         self._validate_col(col)
 
-        new_board = GameBoard(self._side)
+        new_board = Board(self._side)
 
         for r in range(self._side):
             for c in range(self._side): 

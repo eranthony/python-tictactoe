@@ -1,4 +1,5 @@
-from game_board import GameBoard
+"""Module docstring"""
+from .board import Board
 
 
 def next_player(cur_player, total_player):
@@ -32,22 +33,22 @@ def is_winning_move(board, row, col):
     move based on Tic Tac Toe rules. Returns false otherwise.
 
     Args:
-        board (GameBoard): Game board with location values.
+        board (Board): Game board with location values.
         row (int): Row location.
         col (int): Column location.
 
     Raises:
-        TypeError: board must be a GameBoard object.
+        TypeError: board must be a Board object.
         ValueError: game board row must be between 0 and side-1.
         ValueError: game board column must be between 0 and side-1.
     """
-    if not isinstance(board, GameBoard):
-        raise TypeError("board must be a GameBoard object.")
+    if not isinstance(board, Board):
+        raise TypeError("board must be a Board object.")
 
     val = board.get(row, col)
 
     is_ldiag = row == col
-    is_rdiag = row == board.side() - col - 1
+    is_rdiag = row == board.side_len() - col - 1
 
     if all(map(lambda v: v == val, board.get_row(row))):
         return True
@@ -60,7 +61,7 @@ def is_winning_move(board, row, col):
 
     return False
 
-def move_stats(board, cur_player, total_player):
+def move_win_stats(board, cur_player, total_player):
     """Returns the statistics of the current player winning for each
     open move on the board assuming the rules of Tic Tac Toe.
 
@@ -68,7 +69,7 @@ def move_stats(board, cur_player, total_player):
     regardless of prior results or board symmetry. 
 
     Args:
-        board (GameBoard): Current game board. Open positions must have
+        board (Board): Current game board. Open positions must have
             the value of None.
         cur_player (int): Current player number.
         total_player (int): Total number of players.
@@ -86,7 +87,7 @@ def move_stats(board, cur_player, total_player):
         won 3 times. The in the latter case win ratio was 10 to 2.
 
     Raises:
-        TypeError: board must be a GameBoard object.
+        TypeError: board must be a Board object.
     """
     win_stats = {}
 
@@ -108,9 +109,34 @@ def move_stats(board, cur_player, total_player):
             win_stats[pos][cur_player] = 1
         else:
             new_player = next_player(cur_player, total_player)
-            move_stats = move_stats(new_board, new_player, total_player)
-            for wins in move_stats.values():
-                for idx in range(len(wins)):
-                    win_stats[pos][idx] += wins[idx]
+            move_stats = move_win_stats(new_board, new_player, total_player)
+            for stats in iter(move_stats.values()):
+                for idx, stat in enumerate(stats):
+                    win_stats[pos][idx] += stat
 
     return win_stats
+
+
+def has_left_right_symmetry(board):
+    """Returns true if the board has left-right symmetry."""
+    side = board.side_len()
+    max_idx = side / 2
+
+    for row in range(side):
+        for idx in range(max_idx):
+            if board.get(row, idx) != board.get(row, side - idx - 1):
+                return False
+    
+    return True
+
+def has_up_down_symmetry(board):
+    """Returns true if the board has up-down symmetry."""
+    side = board.side_len()
+    max_idx = side / 2
+
+    for col in range(side):
+        for idx in range(max_idx):
+            if board.get(idx, col) != board.get(side - idx - 1, col):
+                return False
+    
+    return True

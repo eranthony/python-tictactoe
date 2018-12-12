@@ -1,6 +1,7 @@
+"""Module docstring"""
 import pytest
-from src.tictactoe_game import next_player, is_winning_move
-from src.game_board import GameBoard
+from game.tictactoe import next_player, is_winning_move
+from game.board import Board
 
 
 def test_next_player_raises_ValueError():
@@ -38,7 +39,7 @@ def test_is_winning_move_raises_TypeError():
 
 def test_is_winning_move_raises_ValueError():
     """Tests is_winning_move() validates arguments."""
-    board = GameBoard(3)
+    board = Board(3)
     with pytest.raises(ValueError):
         is_winning_move(board, -1, 0)
     with pytest.raises(ValueError):
@@ -50,7 +51,7 @@ def test_is_winning_move_raises_ValueError():
         
 def _create_board(side, vals):
     """Return game board from given values."""
-    b = GameBoard(side)
+    b = Board(side)
 
     for row in range(side):
         for col in range(side):
