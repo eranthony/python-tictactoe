@@ -115,28 +115,3 @@ def move_win_stats(board, cur_player, total_player):
                     win_stats[pos][idx] += stat
 
     return win_stats
-
-
-def has_left_right_symmetry(board):
-    """Returns true if the board has left-right symmetry."""
-    side = board.side_len()
-    max_idx = side / 2
-
-    for row in range(side):
-        for idx in range(max_idx):
-            if board.get(row, idx) != board.get(row, side - idx - 1):
-                return False
-    
-    return True
-
-def has_up_down_symmetry(board):
-    """Returns true if the board has up-down symmetry."""
-    side = board.side_len()
-    max_idx = side / 2
-
-    for col in range(side):
-        for idx in range(max_idx):
-            if board.get(idx, col) != board.get(side - idx - 1, col):
-                return False
-    
-    return True
