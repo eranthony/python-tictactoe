@@ -12,25 +12,52 @@ class Board(object):
         None
     """
 
-    def __init__(self, side, ival=None):
+    def __init__(self, side, ivals=None):
         """Initializes a game board of the given side length and 
         initial location values.
+
+        Game board locations can be initialized to a single value or 
+        a list of values. In the case of a list, the values are assumed
+        to be in row first order. However, if an empty list is provided
+        then it is used as the initializing value for all locations.
 
         Args:
             side (int): Length of board on one side. Must be greater 
                 than 0.
-            ival: Initial value for all board locations. Defaults to
+            ivals: Initial values for all board locations. Defaults to
                 None.
 
         Raises:
             ValueError: game board side must be greater than 0.
+            ValueError: game board initialization list must have a value 
+                for all locations.
         """
         if side <= 0:
             raise ValueError("game board side must be greater than 0.")
         
         self._side = side
-        self._vals = [ival for i in range(side*side)]
 
+        if isinstance(ivals, list) and len(ivals) > 0:
+            if len(ivals) != side*side:
+                raise ValueError("game board initialization list must have a value for all locations.")
+
+            self._vals = ivals.copy()
+        else:
+            self._vals = [ivals for i in range(side*side)]
+
+    def __str__(self):
+        """Retuns a string representation of the board."""
+        _str = ""
+
+        for row in range(self._side):
+            for col in range(self._side):
+                _str += str(self.get(row, col))
+                if col < self._side - 1:
+                    _str += ", "
+                elif row < self._side - 1:
+                    _str += "; "
+
+            return "[" + _str + "]"
 
     def _validate_row(self, row):
         """Raises ValueError if row location value is invalid.
@@ -122,23 +149,6 @@ class Board(object):
         return [self.get(idx, side-idx-1) for idx in range(side)]
 
 
-    def matching_pos(self, val):
-        """Returns list of board locations that match the given value.
-
-        Args:
-            val: Board value to match.
-
-        Returns:
-            A list of (row,column) tuples for all board locations with
-            the given value. Returns an empty list of the value is not
-            present in the board.
-        """
-        return [(row, col) 
-                for row in range(self._side)
-                for col in range(self._side) 
-                if self.get(row, col) == val]
-
-
     def set(self, row, col, val):
         """Returns a new board that is a copy of the existing board
         with the given location set to a new value.
@@ -155,15 +165,8 @@ class Board(object):
         self._validate_row(row)
         self._validate_col(col)
 
-        new_board = Board(self._side)
-
-        for r in range(self._side):
-            for c in range(self._side): 
-                idx = self._idx(r, c)
-
-                if r == row and c == col:
-                    new_board._vals[idx] = val
-                else:
-                    new_board._vals[idx] = self._vals[idx]
+        new_board = Board(self._side, self._vals)
+        
+        new_board._vals[self._idx(row, col)] = val
         
         return new_board
