@@ -81,8 +81,8 @@ def matching_positions(board, val):
 
     return [(row, col) 
             for row in range(board.side_len())
-            for col in range(board.side_len()) 
-            if board.get(row, col) == val]
+                for col in range(board.side_len()) 
+                    if board.get(row, col) == val]
 
 def is_symmetric(board, symmetry_fn):
     """Returns true if the board is symmetric based on the symmetry function.

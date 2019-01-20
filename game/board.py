@@ -47,17 +47,18 @@ class Board(object):
 
     def __str__(self):
         """Retuns a string representation of the board."""
-        _str = ""
+        _strs = ["["]
 
         for row in range(self._side):
             for col in range(self._side):
-                _str += str(self.get(row, col))
+                _strs.append(str(self.get(row, col)))
                 if col < self._side - 1:
-                    _str += ", "
+                    _strs.append(", ")
                 elif row < self._side - 1:
-                    _str += "; "
+                    _strs.append("; ")
 
-            return "[" + _str + "]"
+        _strs.append("]")
+        return "".join(_strs)
 
     def _validate_row(self, row):
         """Raises ValueError if row location value is invalid.
