@@ -1,6 +1,7 @@
 """Module docstring"""
+
 from game.board import Board
-from game.tictactoe import next_player, is_winning_move, move_win_stats
+from game.tictactoe import move_win_stats, move_win_stats_fast
 
 
 def _board_pos_idx(board): 
@@ -12,10 +13,10 @@ def _board_pos_idx(board):
 
 
 def main():
-    """Function docstring"""
+    """Displays win statistics for each position within an empty 3x3 board."""
     board = Board(3, None)
 
-    win_stats = move_win_stats(board, 0, 2)
+    win_stats = move_win_stats_fast(board, 0, 2)
 
     for pos in sorted(win_stats.keys(), key=_board_pos_idx(board)):
         wins_sum = sum(win_stats[pos])
